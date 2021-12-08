@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Galgje_v1"
         mc:Ignorable="d"
-        Title="Galgje v1" Height="720" Width="1280" Loaded="Window_Loaded">
+        Title="Galgje v1" Height="720" Width="1280">
+    <Window.Background>
+        <ImageBrush ImageSource="Resources/galgjebg.jpg"/>
+    </Window.Background>
 
-    <DockPanel>
+    <DockPanel Background="Transparent">
 
         <Grid>
 
@@ -29,11 +32,6 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-
-            <Image Source="/Resources/galgjebg.jpg"
-                   Grid.ColumnSpan="6"
-                   Grid.RowSpan="7"
-                   Stretch="Fill"/>
 
             <Image Source="/Resources/gameheader.png"
                    Grid.Column="1"
@@ -80,8 +78,8 @@
                    Foreground="#B51424"
                    Cursor="Hand"
                    MouseDown="BTN_NieuwSpel_MouseDown"
-                   MouseEnter="BTN_NieuwSpel_MouseEnter"
-                   MouseLeave="BTN_NieuwSpel_MouseLeave">
+                   MouseEnter="LBL_MouseEnter"
+                   MouseLeave="LBL_MouseLeave">
                 <Label.Effect>
                     <DropShadowEffect/>
                 </Label.Effect>
@@ -107,8 +105,8 @@
                    Foreground="#B51424"
                    Cursor="Hand"
                    MouseDown="BTN_Verberg_MouseDown"
-                   MouseEnter="BTN_Verberg_MouseEnter"
-                   MouseLeave="BTN_Verberg_MouseLeave"
+                   MouseEnter="LBL_MouseEnter"
+                   MouseLeave="LBL_MouseLeave"
                    Visibility="Hidden">
                 <Label.Effect>
                     <DropShadowEffect/>
@@ -134,8 +132,8 @@
                    Foreground="#B51424"
                    Cursor="Hand"
                    MouseDown="BTN_StartOpnieuw_MouseDown"
-                   MouseEnter="BTN_StartOpnieuw_MouseEnter"
-                   MouseLeave="BTN_StartOpnieuw_MouseLeave"
+                   MouseEnter="LBL_MouseEnter"
+                   MouseLeave="LBL_MouseLeave"
                    Visibility="Hidden">
                 <Label.Effect>
                     <DropShadowEffect/>
@@ -162,8 +160,8 @@
                    Foreground="#B51424"
                    Cursor="Hand"
                    MouseDown="BTN_Raad_MouseDown"
-                   MouseEnter="BTN_Raad_MouseEnter"
-                   MouseLeave="BTN_Raad_MouseLeave"
+                   MouseEnter="LBL_MouseEnter"
+                   MouseLeave="LBL_MouseLeave"
                    Visibility="Hidden">
                 <Label.Effect>
                     <DropShadowEffect/>
@@ -218,7 +216,7 @@
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
-                
+
                 <Image Source="/Resources/musicicon.png"
                        Height="25"
                        Width="25"
@@ -229,7 +227,7 @@
                        VerticalAlignment="Top"/>
 
 
-               <Label Name="BTN_Play"
+                <Label Name="BTN_Play"
                       Height="25"
                       Width="25"
                       Grid.Column="1"

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Galgje_v1
 {
@@ -22,26 +23,26 @@ namespace Galgje_v1
     {
         /// <summary>
         /// Declareren variables
+        /// Aanmaken mediaplayer voor achtergrondmuziek
         /// </summary>
         private int aantalLevens = 10;
-        private string juisteLetters;
-        private string fouteLetters;
-        private string geheimWoord;
+        private string juisteLetters, fouteLetters, geheimWoord;
+        private MediaPlayer achtergrondMuziek = new MediaPlayer();
 
+        /// <summary>
+        /// Componenten initialiseren.
+        /// Path naar achtergrondmuziek geven.
+        /// Achtergrondmuziek starten.
+        /// Event handler maken voor wanneer muziek afloopt.
+        /// Instructie tonen.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+            achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
+            achtergrondMuziek.Play();
+            achtergrondMuziek.MediaEnded += new EventHandler(MediaEnded);
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
-        }
-
-        /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_NieuwSpel_MouseEnter(object sender, MouseEventArgs e)
-        {
-            BTN_NieuwSpel.Background = Brushes.Black;
-            BTN_NieuwSpel.Foreground = Brushes.GhostWhite;
-            BTN_NieuwSpel.BorderBrush = Brushes.GhostWhite;
         }
 
         /// <summary>
@@ -63,26 +64,6 @@ namespace Galgje_v1
         }
 
         /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_NieuwSpel_MouseLeave(object sender, MouseEventArgs e)
-        {
-            BTN_NieuwSpel.Background = Brushes.Transparent;
-            BTN_NieuwSpel.Foreground = (Brush)new BrushConverter().ConvertFrom("#B51424");
-            BTN_NieuwSpel.BorderBrush = Brushes.Black;
-        }
-
-        /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_Verberg_MouseEnter(object sender, MouseEventArgs e)
-        {
-            BTN_Verberg.Background = Brushes.Black;
-            BTN_Verberg.Foreground = Brushes.GhostWhite;
-            BTN_Verberg.BorderBrush = Brushes.GhostWhite;
-        }
-
-        /// <summary>
         /// <code>
         /// Event Handler 'Verberg'-knop.
         /// -----------------------------
@@ -101,26 +82,6 @@ namespace Galgje_v1
             BTN_Raad.Visibility = Visibility.Visible;
             MSG_Label.Content = "Speler 2, begin met raden.";
             OutputText();
-        }
-
-        /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_Verberg_MouseLeave(object sender, MouseEventArgs e)
-        {
-            BTN_Verberg.Background = Brushes.Transparent;
-            BTN_Verberg.Foreground = (Brush)new BrushConverter().ConvertFrom("#B51424");
-            BTN_Verberg.BorderBrush = Brushes.Black;
-        }
-
-        /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_Raad_MouseEnter(object sender, MouseEventArgs e)
-        {
-            BTN_Raad.Background = Brushes.Black;
-            BTN_Raad.Foreground = Brushes.GhostWhite;
-            BTN_Raad.BorderBrush = Brushes.GhostWhite;
         }
 
         /// <summary>
@@ -147,11 +108,13 @@ namespace Galgje_v1
                 {
                     if (geheimWoord.Contains(Input.Text.ToLower()))
                     {
+                        
                         juisteLetters += Input.Text;
                         OutputText();
                     }
                     else
                     {
+                        
                         fouteLetters += Input.Text;
                         aantalLevens--;
                         OutputText();
@@ -171,26 +134,6 @@ namespace Galgje_v1
             {
                 MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
-        }
-
-        /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_Raad_MouseLeave(object sender, MouseEventArgs e)
-        {
-            BTN_Raad.Background = Brushes.Transparent;
-            BTN_Raad.Foreground = (Brush)new BrushConverter().ConvertFrom("#B51424");
-            BTN_Raad.BorderBrush = Brushes.Black;
-        }
-
-        /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_StartOpnieuw_MouseEnter(object sender, MouseEventArgs e)
-        {
-            BTN_StartOpnieuw.Background = Brushes.Black;
-            BTN_StartOpnieuw.Foreground = Brushes.GhostWhite;
-            BTN_StartOpnieuw.BorderBrush = Brushes.GhostWhite;
         }
 
         /// <summary>
@@ -221,24 +164,45 @@ namespace Galgje_v1
         }
 
         /// <summary>
-        /// Styling aanpassen.
-        /// </summary>
-        private void BTN_StartOpnieuw_MouseLeave(object sender, MouseEventArgs e)
-        {
-            BTN_StartOpnieuw.Background = Brushes.Transparent;
-            BTN_StartOpnieuw.Foreground = (Brush)new BrushConverter().ConvertFrom("#B51424");
-            BTN_StartOpnieuw.BorderBrush = Brushes.Black;
-        }
-
-        /// <summary>
         /// Methode om aantal levens, juist letters en foute letters te tonen.
         /// </summary>
         private void OutputText()
         {
             Output.Text = $"Aantal levens: {aantalLevens}\n\r" +
-                          $"Juiste letters: {juisteLetters }\n\r" +
-                          $"Foute letters: {fouteLetters }";
+                          $"Juiste letters: {juisteLetters}\n\r" +
+                          $"Foute letters: {fouteLetters}";
             Input.Text = "";
+        }
+
+        /// <summary>
+        /// Methode om styling van elk label aan te passen bij MouseEnter event.
+        /// </summary>
+        private void LBL_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.Background = Brushes.Black;
+            lbl.Foreground = Brushes.GhostWhite;
+            lbl.BorderBrush = Brushes.GhostWhite;
+        }
+
+        /// <summary>
+        /// methode om styling van elk label aan te passen bij MouseLeave event.
+        /// </summary>
+        private void LBL_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.Background = Brushes.Transparent;
+            lbl.Foreground = (Brush)new BrushConverter().ConvertFrom("#B51424");
+            lbl.BorderBrush = Brushes.Black;
+        }
+
+        /// <summary>
+        /// Methode om achtergrondmuziek continue te laten spelen
+        /// </summary>
+        private void MediaEnded(object sender, EventArgs e)
+        {
+            achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
+            achtergrondMuziek.Play();
         }
 
         /// <summary>
@@ -246,7 +210,7 @@ namespace Galgje_v1
         /// </summary>
         private void BTN_Play_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+            achtergrondMuziek.Play();
         }
 
         /// <summary>
@@ -254,12 +218,7 @@ namespace Galgje_v1
         /// </summary>
         private void BTN_Stop_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            
+            achtergrondMuziek.Pause();
         }
     }
 }

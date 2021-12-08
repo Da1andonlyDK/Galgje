@@ -8,8 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/unseenhorrors.mp3")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/playicon.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/unseenhorrors.wav")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/stopicon.png")]
 
 
