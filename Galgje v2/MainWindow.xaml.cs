@@ -26,9 +26,11 @@ namespace Galgje_v2
         /// Aanmaken mediaplayer voor achtergrondmuziek
         /// </summary>
         private int aantalLevens = 10, countdown = 11;
-        private string juisteLetters, fouteLetters, geheimWoord;
+        private string fouteLetters, geheimWoord;
+        private StringBuilder gw = new StringBuilder(); // gw = geheim woord
         private MediaPlayer achtergrondMuziek = new MediaPlayer();
         private DispatcherTimer timer = new DispatcherTimer();
+        
 
         /// <summary>
         /// Componenten initialiseren.
@@ -82,13 +84,13 @@ namespace Galgje_v2
         private void BTN_Verberg_MouseDown(object sender, RoutedEventArgs e)
         {
             timer.Start();
-            IMG_Timer.Visibility = Visibility.Visible;
             geheimWoord = Input.Text.ToLower();
             Input.Text = "";
             BTN_Verberg.Visibility = Visibility.Hidden;
             BTN_StartOpnieuw.Visibility = Visibility.Visible;
             BTN_Raad.Visibility = Visibility.Visible;
             MSG_Label.Content = "Speler 2, begin met raden.";
+            GeheimWoord(geheimWoord);
             OutputText();
         }
 
@@ -116,14 +118,14 @@ namespace Galgje_v2
                 {
                     if (geheimWoord.Contains(Input.Text.ToLower()))
                     {
-                        juisteLetters += Input.Text;
+                        UpdateStringBuilder(char.Parse(Input.Text.ToLower()));
                         OutputText();
                     }
                     else
                     {
                         fouteLetters += Input.Text;
                         aantalLevens--;
-                        OutputText();
+                        TimerReset();
                     }
                 }
                 else if (Input.Text.ToLower() == geheimWoord)
@@ -133,11 +135,13 @@ namespace Galgje_v2
                 else
                 {
                     aantalLevens--;
-                    OutputText();
+                    TimerReset();
                 }
             }
             else
             {
+                timer.Stop();
+                TB_Timer.Text = "";
                 MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
@@ -157,7 +161,6 @@ namespace Galgje_v2
         private void BTN_StartOpnieuw_MouseDown(object sender, MouseButtonEventArgs e)
         {
             aantalLevens = 10;
-            juisteLetters = "";
             fouteLetters = "";
             Input.Text = "";
             Output.Text = "";
@@ -169,15 +172,53 @@ namespace Galgje_v2
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
+        private string GeheimWoord(string woord)
+        {
+            for (int i = 0; i < geheimWoord.Length; i++)
+            {
+                gw.Clear();
+
+                if (woord[i].Equals(" "))
+                {
+                    gw.Append(" ");
+                }
+                else
+                {
+                    gw.Append("_");
+                }
+            }
+            return gw.ToString();
+        }
+
+        private void UpdateStringBuilder(char a)
+        {
+            for (int i = 0; i < gw.Length; i++)
+            {
+                if (geheimWoord[i] == a)
+                {
+                    gw.Replace('_', a, i, 1);
+                }
+            }
+        }
+
         /// <summary>
         /// Methode om aantal levens, juist letters en foute letters te tonen.
         /// </summary>
         private void OutputText()
         {
             Output.Text = $"Aantal levens: {aantalLevens}\n\r" +
-                          $"Juiste letters: {juisteLetters}\n\r" +
+                          $"Geheim Woord: {GeheimWoord(geheimWoord)}\n\r" +
                           $"Foute letters: {fouteLetters}";
             Input.Text = "";
+        }
+
+        private void UpdateGalg()
+        {
+            BitmapImage galg = new BitmapImage();
+            galg.BeginInit();
+            galg.UriSource = new Uri($"/Resources/galg{aantalLevens}.png", UriKind.RelativeOrAbsolute);
+            galg.EndInit();
+            IMG_Galg.Source = galg;
         }
 
         /// <summary>
@@ -204,10 +245,36 @@ namespace Galgje_v2
 
         /// <summary>
         /// Methode om af te tellen.
+        /// Indien countdown onder 0 gaat, TimerReset oproepen.
+        /// Indien levens op zijn, timer stoppen en textbox clearen.
         /// </summary>
         private void TimerTick(object sender, EventArgs e)
         {
             countdown--;
+            TB_Timer.Text = countdown.ToString();
+
+            if (countdown < 0)
+            {
+                TimerReset();
+            }
+            else if (aantalLevens == 0)
+            {
+                timer.Stop();
+                TB_Timer.Text = "";
+            }
+        }
+
+        private void TimerReset()
+        {
+            aantalLevens--;
+            UpdateGalg();
+            OutputText();
+            countdown--;
+            VolledigScherm.Background = (Brush)new BrushConverter().ConvertFrom("#B51424");
+            timer.Stop();
+            countdown = 10;
+            timer.Start();
+            VolledigScherm.Background = Brushes.Transparent;
             TB_Timer.Text = countdown.ToString();
         }
 

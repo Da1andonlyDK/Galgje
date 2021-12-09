@@ -13,7 +13,8 @@
         <ImageBrush ImageSource="/Resources/galgjebg.jpg" />
     </Window.Background>
 
-    <DockPanel Background="Transparent">
+    <DockPanel Name="VolledigScherm" 
+               Background="Transparent">
 
         <Grid>
 
@@ -211,25 +212,27 @@
                 </TextBlock.Effect>
             </TextBlock>
 
-            <Image
-                Name="IMG_Timer"
-                Grid.Row="5"
-                Grid.Column="0"
-                VerticalAlignment="Bottom"
-                Source="/Resources/tijdomteraden.png"
-                Visibility="Hidden" />
+            <Image Name="IMG_Galg"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="2"
+                   Grid.RowSpan="4"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Stretch="None">
+            </Image>
 
             <TextBox
                 Name="TB_Timer"
-                Grid.Row="6"
                 Grid.Column="0"
+                Grid.Row="6"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 Background="Transparent"
                 BorderThickness="0"
                 FontFamily="/Galgje v2;component/Resources/#GRAPHIC PSYCHOPATHY"
-                FontSize="50"
-                Foreground="GhostWhite" />
+                FontSize="72"
+                Foreground="GhostWhite"/>
 
             <Grid Grid.Row="6" Grid.Column="5">
                 <Grid.ColumnDefinitions>
