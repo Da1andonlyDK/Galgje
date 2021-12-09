@@ -24,31 +24,41 @@ namespace Galgje_v2
         /// <summary>
         /// Declareren variables
         /// Aanmaken mediaplayer voor achtergrondmuziek
+        /// Aanmaken timer
+        /// Aanmaken accentkleur
         /// </summary>
         private int aantalLevens = 10, countdown = 11;
-        private string fouteLetters, geheimWoord;
-        private StringBuilder gw = new StringBuilder(); // gw = geheim woord
+        private string fouteLetters, geheimWoord, geheimWoordTemp;
         private MediaPlayer achtergrondMuziek = new MediaPlayer();
         private DispatcherTimer timer = new DispatcherTimer();
-        
+        private Color accent = new Color();
 
         /// <summary>
+        /// <code>
         /// Componenten initialiseren.
+        /// UpdateGalg uitvoeren.
         /// Timer interval instellen.
         /// Timertick event aanmaken.
         /// Path naar achtergrondmuziek geven.
         /// Achtergrondmuziek starten.
         /// Event handler maken voor wanneer muziek afloopt.
+        /// Waardes voor accentkleur declareren
         /// Instructie tonen.
+        /// </code>
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+            UpdateGalg();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += TimerTick;
             achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
             achtergrondMuziek.Play();
             achtergrondMuziek.MediaEnded += new EventHandler(MediaEnded);
+            accent.R = 181;
+            accent.G = 20;
+            accent.B = 36;
+            accent.A = 128;
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
@@ -90,7 +100,7 @@ namespace Galgje_v2
             BTN_StartOpnieuw.Visibility = Visibility.Visible;
             BTN_Raad.Visibility = Visibility.Visible;
             MSG_Label.Content = "Speler 2, begin met raden.";
-            GeheimWoord(geheimWoord);
+            geheimWoordTemp = TempGeheimWoord();
             OutputText();
         }
 
@@ -118,13 +128,11 @@ namespace Galgje_v2
                 {
                     if (geheimWoord.Contains(Input.Text.ToLower()))
                     {
-                        UpdateStringBuilder(char.Parse(Input.Text.ToLower()));
                         OutputText();
                     }
                     else
                     {
-                        fouteLetters += Input.Text;
-                        aantalLevens--;
+                        fouteLetters += $"{Input.Text} ";
                         TimerReset();
                     }
                 }
@@ -142,7 +150,6 @@ namespace Galgje_v2
             {
                 timer.Stop();
                 TB_Timer.Text = "";
-                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
 
@@ -161,6 +168,7 @@ namespace Galgje_v2
         private void BTN_StartOpnieuw_MouseDown(object sender, MouseButtonEventArgs e)
         {
             aantalLevens = 10;
+            UpdateGalg();
             fouteLetters = "";
             Input.Text = "";
             Output.Text = "";
@@ -172,33 +180,22 @@ namespace Galgje_v2
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
-        private string GeheimWoord(string woord)
+        private string TempGeheimWoord()
         {
+            string temp = "";
+
             for (int i = 0; i < geheimWoord.Length; i++)
             {
-                gw.Clear();
-
-                if (woord[i].Equals(" "))
+                if (geheimWoord[i] == ' ')
                 {
-                    gw.Append(" ");
+                    temp += "  ";
                 }
                 else
                 {
-                    gw.Append("_");
+                    temp += "- ";
                 }
             }
-            return gw.ToString();
-        }
-
-        private void UpdateStringBuilder(char a)
-        {
-            for (int i = 0; i < gw.Length; i++)
-            {
-                if (geheimWoord[i] == a)
-                {
-                    gw.Replace('_', a, i, 1);
-                }
-            }
+            return temp;
         }
 
         /// <summary>
@@ -207,11 +204,14 @@ namespace Galgje_v2
         private void OutputText()
         {
             Output.Text = $"Aantal levens: {aantalLevens}\n\r" +
-                          $"Geheim Woord: {GeheimWoord(geheimWoord)}\n\r" +
+                          $"Geheim Woord: {geheimWoordTemp}\n\r" +
                           $"Foute letters: {fouteLetters}";
             Input.Text = "";
         }
 
+        /// <summary>
+        /// Methode om galg afbeeldingen te updaten
+        /// </summary>
         private void UpdateGalg()
         {
             BitmapImage galg = new BitmapImage();
@@ -253,24 +253,29 @@ namespace Galgje_v2
             countdown--;
             TB_Timer.Text = countdown.ToString();
 
-            if (countdown < 0)
+            if (countdown == 0)
+            {
+                VolledigScherm.Background = new SolidColorBrush(accent);
+            }
+            else if (countdown < 0)
             {
                 TimerReset();
             }
             else if (aantalLevens == 0)
             {
                 timer.Stop();
-                TB_Timer.Text = "";
+                TB_Timer.Text = "0";
+                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
 
         private void TimerReset()
         {
+            VolledigScherm.Background = new SolidColorBrush(accent);
             aantalLevens--;
             UpdateGalg();
             OutputText();
             countdown--;
-            VolledigScherm.Background = (Brush)new BrushConverter().ConvertFrom("#B51424");
             timer.Stop();
             countdown = 10;
             timer.Start();

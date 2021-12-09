@@ -96,6 +96,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\galgjebg.jpg" />
+    <Resource Include="Resources\musicicon.png" />
+    <Resource Include="Resources\outputtekst.png" />
+    <Resource Include="Resources\playicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\stopicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\galg0.png" />
     <Resource Include="Resources\galg1.png" />
     <Resource Include="Resources\galg2.png" />
@@ -106,17 +115,10 @@
     <Resource Include="Resources\galg7.png" />
     <Resource Include="Resources\galg8.png" />
     <Resource Include="Resources\galg9.png" />
-    <Resource Include="Resources\galgjebg.jpg" />
-    <Resource Include="Resources\gameheader.png" />
-    <Resource Include="Resources\musicicon.png" />
-    <Resource Include="Resources\outputtekst.png" />
-    <Resource Include="Resources\playicon.png">
+    <Resource Include="Resources\galg10.png" />
+    <Content Include="Resources\unseenhorrors.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\stopicon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Content Include="Resources\unseenhorrors.mp3" />
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
