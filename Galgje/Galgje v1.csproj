@@ -110,7 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\tijdomteraden.png" />
-    <Content Include="Resources\unseenhorrors.mp3" />
+    <Content Include="Resources\unseenhorrors.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\musicicon.png" />
     <Content Include="Resources\playicon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

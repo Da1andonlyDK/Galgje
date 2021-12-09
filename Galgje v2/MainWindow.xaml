@@ -10,7 +10,7 @@
     Height="720"
     mc:Ignorable="d">
     <Window.Background>
-        <ImageBrush ImageSource="/Resources/galgjebg.jpg" />
+        <ImageBrush ImageSource="/Resources/galgjebg.jpg"/>
     </Window.Background>
 
     <DockPanel Name="VolledigScherm" 

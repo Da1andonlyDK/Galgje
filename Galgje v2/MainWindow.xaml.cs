@@ -132,6 +132,8 @@ namespace Galgje_v2
                     }
                     else
                     {
+                        countdown = 0;
+                        VolledigScherm.Background = new SolidColorBrush(accent);
                         fouteLetters += $"{Input.Text} ";
                         TimerReset();
                     }
@@ -142,7 +144,6 @@ namespace Galgje_v2
                 }
                 else
                 {
-                    aantalLevens--;
                     TimerReset();
                 }
             }
@@ -189,6 +190,10 @@ namespace Galgje_v2
                 if (geheimWoord[i] == ' ')
                 {
                     temp += "  ";
+                }
+                else if (geheimWoord[i].Equals(Input.Text))
+                {
+                    temp.Replace(temp[i], char.Parse(Input.Text));
                 }
                 else
                 {
@@ -255,6 +260,7 @@ namespace Galgje_v2
 
             if (countdown == 0)
             {
+                MSG_Label.Content = $"Sorry, te traag...";
                 VolledigScherm.Background = new SolidColorBrush(accent);
             }
             else if (countdown < 0)
@@ -271,7 +277,7 @@ namespace Galgje_v2
 
         private void TimerReset()
         {
-            VolledigScherm.Background = new SolidColorBrush(accent);
+            MSG_Label.Content = "";
             aantalLevens--;
             UpdateGalg();
             OutputText();
