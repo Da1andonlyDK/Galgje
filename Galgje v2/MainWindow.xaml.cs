@@ -53,13 +53,8 @@ namespace Galgje_v2
             InitializeComponent();
             InstellenAccentKleur();
             UpdateGalg();
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timerTwee.Interval = new TimeSpan(0, 0, 1);
-            timer.Tick += TimerTick;
-            timerTwee.Tick += TimerTickTwee;
-            achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
-            achtergrondMuziek.Play();
-            achtergrondMuziek.MediaEnded += new EventHandler(MediaEnded);
+            InstellenTimers();
+            InstellenAchtergrondmuziek();
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
@@ -138,7 +133,7 @@ namespace Galgje_v2
                         VolledigScherm.Background = new SolidColorBrush(accent);
                         countdownTwee = 1;
                         timerTwee.Start();
-                        fouteLetters += $"{Input.Text} ";
+                        fouteLetters += $"{Input.Text.ToLower()} ";
                         OutputText();
                     }
                 }
@@ -147,6 +142,8 @@ namespace Galgje_v2
                     timer.Stop();
                     countdown = 0;
                     TB_Timer.Text = countdown.ToString();
+                    VervangMetCorrectWoord();
+                    OutputText();
                     MSG_Label.Content = $"Proficiat speler 2, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!";
                 }
                 else
@@ -176,8 +173,10 @@ namespace Galgje_v2
         /// </summary>
         private void BTN_StartOpnieuw_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            timer.Stop();
             aantalLevens = 10;
             countdown = 11;
+            countdownTwee = 1;
             UpdateGalg();
             ClearAlleInputEnOutput();
             VolledigScherm.Background = Brushes.Transparent;
@@ -189,24 +188,8 @@ namespace Galgje_v2
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
-        private void InstellenAccentKleur()
-        {
-            accent.R = 181;
-            accent.G = 20;
-            accent.B = 36;
-            accent.A = 128;
-        }
-
-        private void ClearAlleInputEnOutput()
-        {
-            fouteLetters = "";
-            Input.Text = "";
-            Output.Text = "";
-            TB_Timer.Text = "";
-        }
-
         /// <summary>
-        /// Methode om correct geraden letters te tonen op correcte positie
+        /// Methode om correct geraden letters te tonen op correcte positie in array.
         /// </summary>
         private void VervangMetCorrecteLetters()
         {
@@ -222,7 +205,15 @@ namespace Galgje_v2
         }
 
         /// <summary>
-        /// Methode om het ingegeven geheim woord gemaskeerd weer te geven
+        /// Methode om correct geraden woord te tonen.
+        /// </summary>
+        private void VervangMetCorrectWoord()
+        {
+            outputGeheimWoord = geheimWoord.ToCharArray();
+        }
+
+        /// <summary>
+        /// Methode om het ingegeven geheim woord gemaskeerd weer te geven.
         /// </summary>
         private void OutputTemp()
         {
@@ -262,6 +253,107 @@ namespace Galgje_v2
         }
 
         /// <summary>
+        /// Methode om timers in te stellen.
+        /// </summary>
+        private void InstellenTimers()
+        {
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timerTwee.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += TimerTick;
+            timerTwee.Tick += TimerTickTwee;
+        }
+
+        /// <summary>
+        /// Methode voor timer.
+        /// Indien countdown 0 is, diss tonen, scherm flasht rood.
+        /// Indien countdown onder 0 gaat, TimerReset oproepen.
+        /// Indien aantal levens 0 is, timer stoppen en textbox clearen.
+        /// </summary>
+        private void TimerTick(object sender, EventArgs e)
+        {
+            countdown--;
+            countdownTwee = 1;
+            TB_Timer.Text = countdown.ToString();
+
+            if (countdown == 0)
+            {
+                MSG_Label.Content = $"Sorry, te traag...";
+                VolledigScherm.Background = new SolidColorBrush(accent);
+            }
+            else if (countdown < 0)
+            {
+                TimerResetFout();
+            }
+            else if (aantalLevens == 0)
+            {
+                VolledigScherm.Background = new SolidColorBrush(accent);
+                timer.Stop();
+                TB_Timer.Text = "0";
+                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
+            }
+        }
+
+        /// <summary>
+        /// Methode voor timer twee.
+        /// Indien countdown twee 0 is, -1 leven,
+        /// timer en timer twee stoppen,
+        /// countdown resetten,
+        /// timer herstarten.
+        /// Scherm kleur (achtergrond) resetten.
+        /// </summary>
+        private void TimerTickTwee(object sender, EventArgs e)
+        {
+            countdownTwee--;
+            if (countdownTwee == 0)
+            {
+                aantalLevens--;
+                UpdateGalg();
+                timer.Stop();
+                TB_Timer.Text = "0";
+                timerTwee.Stop();
+                countdown = 10;
+                timer.Start();
+                TB_Timer.Text = countdown.ToString();
+                VolledigScherm.Background = Brushes.Transparent;
+            }
+            else if (aantalLevens == 0)
+            {
+                VolledigScherm.Background = new SolidColorBrush(accent);
+                timer.Stop();
+                TB_Timer.Text = "0";
+                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
+            }
+        }
+
+        /// <summary>
+        /// Methode om timer resetten bij correcte gok.
+        /// </summary>
+        private void TimerResetCorrect()
+        {
+            timer.Stop();
+            countdown = 10;
+            timer.Start();
+            TB_Timer.Text = countdown.ToString();
+        }
+
+        /// <summary>
+        /// Methode om timer te resetten bij foute gok.
+        /// </summary>
+        private void TimerResetFout()
+        {
+            MSG_Label.Content = "";
+            aantalLevens--;
+            UpdateGalg();
+            OutputText();
+            countdown--;
+            timer.Stop();
+            countdown = 10;
+            timer.Start();
+            VolledigScherm.Background = Brushes.Transparent;
+            TB_Timer.Text = countdown.ToString();
+        }
+
+        /// <summary>
         /// Methode om styling van elk label aan te passen bij MouseEnter event.
         /// </summary>
         private void LBL_MouseEnter(object sender, MouseEventArgs e)
@@ -284,86 +376,39 @@ namespace Galgje_v2
         }
 
         /// <summary>
-        /// Methode voor timer.
-        /// Indien countdown 0 is diss tonen, scherm flasht rood.
-        /// Indien countdown onder 0 gaat, TimerReset oproepen.
-        /// Indien aantal levens 0 is, timer stoppen en textbox clearen.
+        /// Methode om accent kleur in te stellen.
         /// </summary>
-        private void TimerTick(object sender, EventArgs e)
+        private void InstellenAccentKleur()
         {
-            countdown--;
-            TB_Timer.Text = countdown.ToString();
-
-            if (countdown == 0)
-            {
-                MSG_Label.Content = $"Sorry, te traag...";
-                VolledigScherm.Background = new SolidColorBrush(accent);
-            }
-            else if (countdown < 0)
-            {
-                TimerResetFout();
-            }
-            else if (aantalLevens == 0)
-            {
-                VolledigScherm.Background = new SolidColorBrush(accent);
-                timer.Stop();
-                TB_Timer.Text = "0";
-                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
-            }
+            accent.R = 181;
+            accent.G = 20;
+            accent.B = 36;
+            accent.A = 128;
         }
 
         /// <summary>
-        /// Methode voor timer twee
-        /// Indien countdown twee 0 is, -1 leven,
-        /// timer en timer twee stoppen,
-        /// countdown resetten,
-        /// timer herstarten.
-        /// Scherm kleur (achtergrond) resetten.
+        /// Methode om alle input en output te clearen.
         /// </summary>
-        private void TimerTickTwee(object sender, EventArgs e)
+        private void ClearAlleInputEnOutput()
         {
-            countdownTwee--;
-            if (countdownTwee == 0)
-            {
-                aantalLevens--;
-                timer.Stop();
-                timerTwee.Stop();
-                countdown = 11;
-                timer.Start();
-                VolledigScherm.Background = Brushes.Transparent;
-            }
+            fouteLetters = "";
+            Input.Text = "";
+            Output.Text = "";
+            TB_Timer.Text = "";
         }
 
         /// <summary>
-        /// Methode om timer resetten bij correcte gok.
+        /// Methode om achtergrondmuziek in te stellen.
         /// </summary>
-        private void TimerResetCorrect()
+        private void InstellenAchtergrondmuziek()
         {
-            timer.Stop();
-            countdown = 10;
-            timer.Start();
-            TB_Timer.Text = countdown.ToString();
+            achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
+            achtergrondMuziek.Play();
+            achtergrondMuziek.MediaEnded += new EventHandler(MediaEnded);
         }
 
         /// <summary>
-        /// Methode om timer te resetten bij foute gok
-        /// </summary>
-        private void TimerResetFout()
-        {
-            MSG_Label.Content = "";
-            aantalLevens--;
-            UpdateGalg();
-            OutputText();
-            countdown--;
-            timer.Stop();
-            countdown = 10;
-            timer.Start();
-            VolledigScherm.Background = Brushes.Transparent;
-            TB_Timer.Text = countdown.ToString();
-        }
-
-        /// <summary>
-        /// Methode om achtergrondmuziek continue te laten spelen
+        /// Methode om achtergrondmuziek continue te laten spelen.
         /// </summary>
         private void MediaEnded(object sender, EventArgs e)
         {
