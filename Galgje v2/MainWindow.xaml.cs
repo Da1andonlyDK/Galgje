@@ -27,10 +27,12 @@ namespace Galgje_v2
         /// Aanmaken timer
         /// Aanmaken accentkleur
         /// </summary>
-        private int aantalLevens = 10, countdown = 11;
-        private string fouteLetters, geheimWoord, geheimWoordTemp;
+        private int aantalLevens = 10, countdown = 11, countdownTwee = 1;
+        private string fouteLetters, geheimWoord;
+        private char[] geheimWoordTemp, outputGeheimWoord;
         private MediaPlayer achtergrondMuziek = new MediaPlayer();
         private DispatcherTimer timer = new DispatcherTimer();
+        private DispatcherTimer timerTwee = new DispatcherTimer();
         private Color accent = new Color();
 
         /// <summary>
@@ -49,16 +51,15 @@ namespace Galgje_v2
         public MainWindow()
         {
             InitializeComponent();
+            InstellenAccentKleur();
             UpdateGalg();
             timer.Interval = new TimeSpan(0, 0, 1);
+            timerTwee.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += TimerTick;
+            timerTwee.Tick += TimerTickTwee;
             achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
             achtergrondMuziek.Play();
             achtergrondMuziek.MediaEnded += new EventHandler(MediaEnded);
-            accent.R = 181;
-            accent.G = 20;
-            accent.B = 36;
-            accent.A = 128;
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
@@ -100,7 +101,7 @@ namespace Galgje_v2
             BTN_StartOpnieuw.Visibility = Visibility.Visible;
             BTN_Raad.Visibility = Visibility.Visible;
             MSG_Label.Content = "Speler 2, begin met raden.";
-            geheimWoordTemp = TempGeheimWoord();
+            OutputTemp();
             OutputText();
         }
 
@@ -128,29 +129,36 @@ namespace Galgje_v2
                 {
                     if (geheimWoord.Contains(Input.Text.ToLower()))
                     {
+                        TimerResetCorrect();
+                        VervangMetCorrecteLetters();
                         OutputText();
                     }
-                    else
+                    else if (!geheimWoord.Contains(Input.Text.ToLower()))
                     {
-                        countdown = 0;
                         VolledigScherm.Background = new SolidColorBrush(accent);
+                        countdownTwee = 1;
+                        timerTwee.Start();
                         fouteLetters += $"{Input.Text} ";
-                        TimerReset();
+                        OutputText();
                     }
                 }
-                else if (Input.Text.ToLower() == geheimWoord)
+                else if (Input.Text.ToLower() == geheimWoord || String.Join("", outputGeheimWoord) == geheimWoord)
                 {
+                    timer.Stop();
+                    countdown = 0;
+                    TB_Timer.Text = countdown.ToString();
                     MSG_Label.Content = $"Proficiat speler 2, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!";
                 }
                 else
                 {
-                    TimerReset();
+                    TimerResetFout();
                 }
             }
             else
             {
                 timer.Stop();
-                TB_Timer.Text = "";
+                countdown = 0;
+                TB_Timer.Text = countdown.ToString();
             }
         }
 
@@ -169,10 +177,10 @@ namespace Galgje_v2
         private void BTN_StartOpnieuw_MouseDown(object sender, MouseButtonEventArgs e)
         {
             aantalLevens = 10;
+            countdown = 11;
             UpdateGalg();
-            fouteLetters = "";
-            Input.Text = "";
-            Output.Text = "";
+            ClearAlleInputEnOutput();
+            VolledigScherm.Background = Brushes.Transparent;
             BTN_StartOpnieuw.Visibility = Visibility.Hidden;
             BTN_Raad.Visibility = Visibility.Hidden;
             BTN_NieuwSpel.Visibility = Visibility.Visible;
@@ -181,26 +189,51 @@ namespace Galgje_v2
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
-        private string TempGeheimWoord()
+        private void InstellenAccentKleur()
         {
-            string temp = "";
+            accent.R = 181;
+            accent.G = 20;
+            accent.B = 36;
+            accent.A = 128;
+        }
+
+        private void ClearAlleInputEnOutput()
+        {
+            fouteLetters = "";
+            Input.Text = "";
+            Output.Text = "";
+            TB_Timer.Text = "";
+        }
+
+        /// <summary>
+        /// Methode om correct geraden letters te tonen op correcte positie
+        /// </summary>
+        private void VervangMetCorrecteLetters()
+        {
+            char a = char.Parse(Input.Text.ToLower());
 
             for (int i = 0; i < geheimWoord.Length; i++)
             {
-                if (geheimWoord[i] == ' ')
+                if (geheimWoordTemp[i] == a)
                 {
-                    temp += "  ";
-                }
-                else if (geheimWoord[i].Equals(Input.Text))
-                {
-                    temp.Replace(temp[i], char.Parse(Input.Text));
-                }
-                else
-                {
-                    temp += "- ";
+                    outputGeheimWoord[i] = a;
                 }
             }
-            return temp;
+        }
+
+        /// <summary>
+        /// Methode om het ingegeven geheim woord gemaskeerd weer te geven
+        /// </summary>
+        private void OutputTemp()
+        {
+            geheimWoordTemp = new char[geheimWoord.Length];
+            outputGeheimWoord = new char[geheimWoordTemp.Length];
+
+            for (int i = 0; i < geheimWoord.Length; i++)
+            {
+                geheimWoordTemp[i] = geheimWoord[i];
+                outputGeheimWoord[i] = '-';
+            }
         }
 
         /// <summary>
@@ -208,8 +241,10 @@ namespace Galgje_v2
         /// </summary>
         private void OutputText()
         {
+            string tempOutput = String.Join(" ", outputGeheimWoord);
+
             Output.Text = $"Aantal levens: {aantalLevens}\n\r" +
-                          $"Geheim Woord: {geheimWoordTemp}\n\r" +
+                          $"Geheim Woord: {tempOutput}\n\r" +
                           $"Foute letters: {fouteLetters}";
             Input.Text = "";
         }
@@ -249,9 +284,10 @@ namespace Galgje_v2
         }
 
         /// <summary>
-        /// Methode om af te tellen.
+        /// Methode voor timer.
+        /// Indien countdown 0 is diss tonen, scherm flasht rood.
         /// Indien countdown onder 0 gaat, TimerReset oproepen.
-        /// Indien levens op zijn, timer stoppen en textbox clearen.
+        /// Indien aantal levens 0 is, timer stoppen en textbox clearen.
         /// </summary>
         private void TimerTick(object sender, EventArgs e)
         {
@@ -265,17 +301,54 @@ namespace Galgje_v2
             }
             else if (countdown < 0)
             {
-                TimerReset();
+                TimerResetFout();
             }
             else if (aantalLevens == 0)
             {
+                VolledigScherm.Background = new SolidColorBrush(accent);
                 timer.Stop();
                 TB_Timer.Text = "0";
                 MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
 
-        private void TimerReset()
+        /// <summary>
+        /// Methode voor timer twee
+        /// Indien countdown twee 0 is, -1 leven,
+        /// timer en timer twee stoppen,
+        /// countdown resetten,
+        /// timer herstarten.
+        /// Scherm kleur (achtergrond) resetten.
+        /// </summary>
+        private void TimerTickTwee(object sender, EventArgs e)
+        {
+            countdownTwee--;
+            if (countdownTwee == 0)
+            {
+                aantalLevens--;
+                timer.Stop();
+                timerTwee.Stop();
+                countdown = 11;
+                timer.Start();
+                VolledigScherm.Background = Brushes.Transparent;
+            }
+        }
+
+        /// <summary>
+        /// Methode om timer resetten bij correcte gok.
+        /// </summary>
+        private void TimerResetCorrect()
+        {
+            timer.Stop();
+            countdown = 10;
+            timer.Start();
+            TB_Timer.Text = countdown.ToString();
+        }
+
+        /// <summary>
+        /// Methode om timer te resetten bij foute gok
+        /// </summary>
+        private void TimerResetFout()
         {
             MSG_Label.Content = "";
             aantalLevens--;

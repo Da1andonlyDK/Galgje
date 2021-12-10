@@ -98,7 +98,6 @@
   <ItemGroup>
     <Resource Include="Resources\galgjebg.jpg" />
     <Resource Include="Resources\musicicon.png" />
-    <Resource Include="Resources\outputtekst.png" />
     <Resource Include="Resources\playicon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

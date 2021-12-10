@@ -103,13 +103,9 @@
     <Resource Include="Resources\galgjebg.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\outputtekst.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\gameheader.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tijdomteraden.png" />
     <Content Include="Resources\unseenhorrors.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
