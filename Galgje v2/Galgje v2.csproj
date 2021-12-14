@@ -115,6 +115,9 @@
     <Resource Include="Resources\galg8.png" />
     <Resource Include="Resources\galg9.png" />
     <Resource Include="Resources\galg10.png" />
+    <Content Include="Resources\bingbong.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\unseenhorrors.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

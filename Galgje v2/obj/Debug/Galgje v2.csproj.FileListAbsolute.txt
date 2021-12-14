@@ -15,3 +15,4 @@ C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Ga
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v2\obj\Debug\Galgje v2.pdb
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v2\bin\Debug\Resources\unseenhorrors.mp3
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v2\obj\Debug\Galgje v2_Content.g.cs
+C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v2\bin\Debug\Resources\bingbong.mp3
