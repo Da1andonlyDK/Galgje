@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Galgje v1", "Galgje\Galgje 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Galgje v2", "Galgje v2\Galgje v2.csproj", "{4E94660C-C71A-46F5-8A7D-E406AA970E70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Galgje v3", "Galgje v3\Galgje v3.csproj", "{D13D40D9-267E-44A0-976A-5BBE2E7E142D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4E94660C-C71A-46F5-8A7D-E406AA970E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E94660C-C71A-46F5-8A7D-E406AA970E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E94660C-C71A-46F5-8A7D-E406AA970E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D13D40D9-267E-44A0-976A-5BBE2E7E142D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D13D40D9-267E-44A0-976A-5BBE2E7E142D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D13D40D9-267E-44A0-976A-5BBE2E7E142D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D13D40D9-267E-44A0-976A-5BBE2E7E142D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
