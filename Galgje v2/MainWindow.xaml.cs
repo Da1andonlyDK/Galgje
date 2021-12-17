@@ -449,8 +449,11 @@ namespace Galgje_v2
 
         private void VerliesLeven()
         {
+            List<string> soundEffects = new List<string>() { "Resources/sf0.mp3", "Resources/sf1.mp3", "Resources/sf2.mp3" };
+            Random rng = new Random();
+            string uri = soundEffects[rng.Next(0, soundEffects.Count)];
             aantalLevens--;
-            verliesLeven.Open(new Uri(@"Resources/bingbong.mp3", UriKind.Relative));
+            verliesLeven.Open(new Uri(@uri, UriKind.Relative));
             verliesLeven.Play();
         }
 

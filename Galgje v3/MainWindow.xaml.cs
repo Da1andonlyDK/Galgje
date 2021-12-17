@@ -169,7 +169,7 @@ namespace Galgje_v3
             spelerNaam = Input.Text;
             aantalLevensOpgebruikt = 10 - aantalLevens;
             huidigeDagEnTijd = DateTime.Now;
-            string huidigeTijd = huidigeDagEnTijd.ToShortTimeString();
+            string huidigeTijd = huidigeDagEnTijd.ToLongTimeString();
             MSG_Label.Content = score.AppendLine($"{spelerNaam} - {aantalLevensOpgebruikt} levens ({huidigeTijd})");
             BTN_Opslaan.Visibility = Visibility.Hidden;
             Input.IsEnabled = false;
