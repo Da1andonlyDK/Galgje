@@ -30,7 +30,8 @@ namespace Galgje_v3
         private int aantalLevens = 10, countdown = 11, countdownTwee = 1;
         private string fouteLetters, geheimWoord, tempOutput;
         private string[] alfabet = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-        private char[] geheimWoordTemp, outputGeheimWoord;
+        private char[] geheimWoordTemp, outputGeheimWoord, alfabetTemp;
+        private StringBuilder scorebord = new StringBuilder();
         private MediaPlayer achtergrondMuziek = new MediaPlayer();
         private MediaPlayer verliesLeven = new MediaPlayer();
         private DispatcherTimer timer = new DispatcherTimer();
@@ -484,8 +485,8 @@ namespace Galgje_v3
         private void mnuHint_Click(object sender, RoutedEventArgs e)
         {
             Random rng = new Random();
-
             string hintLetter = alfabet[rng.Next(0, alfabet.Length)];
+            int teller = 0;
 
             if (geheimWoord.Contains(hintLetter))
             {
@@ -501,9 +502,8 @@ namespace Galgje_v3
                 {
                     case MessageBoxResult.OK:
                         VolledigScherm.Background = Brushes.Transparent;
-                        VerliesLeven();
-                        UpdateGalg();
-                        fouteLetters += $"{hintLetter} ";
+                        alfabetTemp[teller] = char.Parse(hintLetter);
+                        teller++;
                         OutputText();
                         countdown = 11;
                         timer.Start();
@@ -526,9 +526,8 @@ namespace Galgje_v3
                 {
                     case MessageBoxResult.OK:
                         VolledigScherm.Background = Brushes.Transparent;
-                        VerliesLeven();
-                        UpdateGalg();
-                        fouteLetters += $"{hintLetter} ";
+                        alfabetTemp[teller] = char.Parse(hintLetter);
+                        teller++;
                         OutputText();
                         countdown = 11;
                         timer.Start();
@@ -538,18 +537,26 @@ namespace Galgje_v3
                 }
             }
         }
+
         private void mnuAfsluiten_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Ben je zeker dat je wilt afsluiten?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            MessageBoxResult resultaat = MessageBox.Show("Ben je zeker dat je wilt afsluiten?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
-            if (DialogResult.Equals(MessageBoxButton.OK))
+            switch (resultaat)
             {
-                Close();
+                case MessageBoxResult.OK:
+                    Close();
+                    break;
+                case MessageBoxResult.Cancel:
+                    return;
+                default:
+                    break;
             }
-            else
-            {
-                return;
-            }
+        }
+
+        private void mnuScorebord_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
