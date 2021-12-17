@@ -27,15 +27,17 @@ namespace Galgje_v3
         /// Aanmaken timer
         /// Aanmaken accentkleur
         /// </summary>
-        private int aantalLevens = 10, countdown = 11, countdownTwee = 1;
-        private string fouteLetters, geheimWoord, tempOutput;
+        private int aantalLevens = 10, aantalLevensOpgebruikt, countdown = 11, countdownTwee = 1;
+        private string fouteLetters, geheimWoord, tempOutput, spelerNaam;
         private string[] alfabet = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-        private char[] geheimWoordTemp, outputGeheimWoord, alfabetTemp;
-        private StringBuilder scorebord = new StringBuilder();
+        private char[] geheimWoordTemp, outputGeheimWoord;
+        private List<char> alfabetTemp = new List<char>();
+        private StringBuilder score = new StringBuilder();
         private MediaPlayer achtergrondMuziek = new MediaPlayer();
         private MediaPlayer verliesLeven = new MediaPlayer();
         private DispatcherTimer timer = new DispatcherTimer();
         private DispatcherTimer timerTwee = new DispatcherTimer();
+        private DateTime huidigeDagEnTijd;
         private Color accent = new Color();
 
         /// <summary>
@@ -145,7 +147,10 @@ namespace Galgje_v3
                     TimerReset();
                     VervangMetCorrectWoord();
                     OutputText();
-                    MSG_Label.Content = $"Proficiat speler 2, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!";
+                    MSG_Label.Content = $"Proficiat speler 2, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!\n\r" +
+                                        $"Geef je naam in om de score op te slaan.";
+                    BTN_Raad.Visibility = Visibility.Hidden;
+                    BTN_Opslaan.Visibility = Visibility.Visible;
                 }
                 else
                 {
@@ -157,6 +162,17 @@ namespace Galgje_v3
             {
                 TimerReset();
             }
+        }
+
+        private void BTN_Opslaan_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            spelerNaam = Input.Text;
+            aantalLevensOpgebruikt = 10 - aantalLevens;
+            huidigeDagEnTijd = DateTime.Now;
+            string huidigeTijd = huidigeDagEnTijd.ToShortTimeString();
+            MSG_Label.Content = score.AppendLine($"{spelerNaam} - {aantalLevensOpgebruikt} levens ({huidigeTijd})");
+            BTN_Opslaan.Visibility = Visibility.Hidden;
+            Input.IsEnabled = false;
         }
 
         /// <summary>
@@ -486,13 +502,12 @@ namespace Galgje_v3
         {
             Random rng = new Random();
             string hintLetter = alfabet[rng.Next(0, alfabet.Length)];
-            int teller = 0;
 
             if (geheimWoord.Contains(hintLetter))
             {
                 hintLetter = alfabet[rng.Next(0, alfabet.Length)];
             }
-            else if (String.IsNullOrEmpty(fouteLetters) && !geheimWoord.Contains(hintLetter))
+            else if (!geheimWoord.Contains(hintLetter))
             {
                 timer.Stop();
                 VolledigScherm.Background = new SolidColorBrush(accent);
@@ -502,8 +517,7 @@ namespace Galgje_v3
                 {
                     case MessageBoxResult.OK:
                         VolledigScherm.Background = Brushes.Transparent;
-                        alfabetTemp[teller] = char.Parse(hintLetter);
-                        teller++;
+                        alfabetTemp.Add(char.Parse(hintLetter));
                         OutputText();
                         countdown = 11;
                         timer.Start();
@@ -512,7 +526,7 @@ namespace Galgje_v3
                         break;
                 }
             }
-            else if (fouteLetters.Contains(hintLetter))
+            else if (alfabetTemp.Contains(char.Parse(hintLetter)))
             {
                 hintLetter = alfabet[rng.Next(0, alfabet.Length)];
             }
@@ -526,8 +540,7 @@ namespace Galgje_v3
                 {
                     case MessageBoxResult.OK:
                         VolledigScherm.Background = Brushes.Transparent;
-                        alfabetTemp[teller] = char.Parse(hintLetter);
-                        teller++;
+                        alfabetTemp.Add(char.Parse(hintLetter));
                         OutputText();
                         countdown = 11;
                         timer.Start();
