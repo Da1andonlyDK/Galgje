@@ -12,6 +12,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/sf1.mp3")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/sf2.mp3")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/sf3.mp3")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/sf4.mp3")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/unseenhorrors.mp3")]
 
 

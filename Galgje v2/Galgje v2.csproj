@@ -127,6 +127,9 @@
     <Content Include="Resources\sf3.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\sf4.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\unseenhorrors.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
