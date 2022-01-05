@@ -1,4 +1,3 @@
-C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\bin\Debug\Resources\bingbong.mp3
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\bin\Debug\Resources\unseenhorrors.mp3
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\bin\Debug\Galgje v3.exe.config
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\bin\Debug\Galgje v3.exe
@@ -16,3 +15,4 @@ C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Ga
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\obj\Debug\Galgje v3.csproj.CoreCompileInputs.cache
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\obj\Debug\Galgje v3.exe
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\obj\Debug\Galgje v3.pdb
+C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\bin\Debug\Resources\demonicscream.mp3

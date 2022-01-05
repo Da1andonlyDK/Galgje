@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.VisualBasic;
 
 namespace Galgje_v3
 {
@@ -27,17 +28,19 @@ namespace Galgje_v3
         /// Aanmaken timer
         /// Aanmaken accentkleur
         /// </summary>
-        private int aantalLevens = 10, aantalLevensOpgebruikt, countdown = 11, countdownTwee = 1;
-        private string fouteLetters, geheimWoord, tempOutput, spelerNaam;
+        private bool hint = false;
+        private int aantalLevens = 10, aantalLevensOpgebruikt, countdown, countdownInput, countdownTwee = 1;
+        private string fouteLetters, geheimWoord, tempOutput, spelerNaam, scoreSpeler;
+        private string[] galgjeWoorden = new string[] { "grafeem", "tjiftjaf", "maquette", "kitsch", "pochet", "convocaat", "jakkeren", "collaps", "zuivel", "cesium", "voyant", "spitten", "pancake", "gietlepel", "karwats", "dehydreren", "viswijf", "flater", "cretonne", "sennhut", "tichel", "wijten", "cadeau", "trotyl", "chopper", "pielen", "vigeren", "vrijuit", "dimorf", "kolchoz", "janhen", "plexus", "borium", "ontweien", "quiche", "ijverig", "mecenaat", "falset", "telexen", "hieruit", "femelaar", "cohesie", "exogeen", "plebejer", "opbouw", "zodiak", "volder", "vrezen", "convex", "verzenden", "ijstijd", "fetisj", "gerekt", "necrose", "conclaaf", "clipper", "poppetjes", "looikuip", "hinten", "inbreng", "arbitraal", "dewijl", "kapzaag", "welletjes", "bissen", "catgut", "oxymoron", "heerschaar", "ureter", "kijkbuis", "dryade", "grofweg", "laudanum", "excitatie", "revolte", "heugel", "geroerd", "hierbij", "glazig", "pussen", "liquide", "aquarium", "formol", "kwelder", "zwager", "vuldop", "halfaap", "hansop", "windvaan", "bewogen", "vulstuk", "efemeer", "decisief", "omslag", "prairie", "schuit", "weivlies", "ontzeggen", "schijn", "sousafoon" };
         private string[] alfabet = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
         private char[] geheimWoordTemp, outputGeheimWoord;
+        private List<string> scorebord = new List<string>();
         private List<char> alfabetTemp = new List<char>();
         private StringBuilder score = new StringBuilder();
         private MediaPlayer achtergrondMuziek = new MediaPlayer();
         private MediaPlayer verliesLeven = new MediaPlayer();
         private DispatcherTimer timer = new DispatcherTimer();
         private DispatcherTimer timerTwee = new DispatcherTimer();
-        private DateTime huidigeDagEnTijd;
         private Color accent = new Color();
 
         /// <summary>
@@ -68,12 +71,70 @@ namespace Galgje_v3
         /// </summary>
         private void BTN_NieuwSpel_MouseDown(object sender, RoutedEventArgs e)
         {
-            Input.IsEnabled = true;
-            Input.Visibility = Visibility.Visible;
+            MSG_Label.Content = "Heb je vrienden of niet ?";
             BTN_NieuwSpel.Visibility = Visibility.Hidden;
-            BTN_Verberg.Visibility = Visibility.Visible;
-            MSG_Label.Content = "Speler 1, geef een geheim woord in en verberg het.";
+            BTN_Singleplayer.Visibility = Visibility.Visible;
+            BTN_Multiplayer.Visibility = Visibility.Visible;
         }
+
+        private void NieuwSpel_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            BTN_NieuwSpel_MouseDown(sender, e);
+        }
+
+        private void BTN_Singleplayer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TimerInstellen();
+            TB_Timer.Text = countdown.ToString();
+            timer.Start();
+            BTN_Singleplayer.Visibility = Visibility.Hidden;
+            BTN_Multiplayer.Visibility = Visibility.Hidden;
+            Random rng = new Random();
+            geheimWoord = galgjeWoorden[rng.Next(galgjeWoorden.Length)];
+            BTN_StartOpnieuw.Visibility = Visibility.Visible;
+            BTN_Raad.Visibility = Visibility.Visible;
+            TB_Input.Visibility = Visibility.Visible;
+            TB_Input.IsEnabled = true;
+            Hint.IsEnabled = true;
+            MSG_Label.Content = "Begin met raden.";
+            OutputGeheimWoord();
+            OutputText();
+
+        }
+
+        private void BTN_Multiplayer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TimerInstellen();
+            BTN_Singleplayer.Visibility = Visibility.Hidden;
+            BTN_Multiplayer.Visibility = Visibility.Hidden;
+        }
+
+        private void TimerInstellen()
+        {
+            try
+            {
+                countdownInput = int.Parse(Interaction.InputBox("Hoe lang wil je de tijd hebben om te raden?\n\rGeef een getal tussen 5 en 25.", "Timer", "10"));
+                countdown = countdownInput;
+
+                if (countdown < 5 || countdown > 25)
+                {
+                    if (MessageBox.Show("Het ingegeven getal bevind zich buiten het gevraagde bereik, probeer opnieuw...") == MessageBoxResult.OK)
+                    {
+                        TimerInstellen();
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+                if (MessageBox.Show("De input is geen getal tussen 5 en 25, probeer opnieuw...") == MessageBoxResult.OK)
+                {
+                    TimerInstellen();
+                }
+            }
+        }
+
 
         /// <summary>
         /// <code>
@@ -88,12 +149,13 @@ namespace Galgje_v3
         /// </summary>
         private void BTN_Verberg_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(Input.Text))
+            if (!String.IsNullOrEmpty(TB_Input.Text))
             {
+                TB_Timer.Text = countdown.ToString();
                 timer.Start();
-                geheimWoord = Input.Text.ToLower();
+                geheimWoord = TB_Input.Text.ToLower();
                 Hint.IsEnabled = true;
-                Input.Text = "";
+                TB_Input.Text = "";
                 BTN_Verberg.Visibility = Visibility.Hidden;
                 BTN_StartOpnieuw.Visibility = Visibility.Visible;
                 BTN_Raad.Visibility = Visibility.Visible;
@@ -127,30 +189,27 @@ namespace Galgje_v3
 
             if (aantalLevens != 0)
             {
-                if (Input.Text.Length == 1)
+                if (TB_Input.Text.Length == 1)
                 {
-                    if (geheimWoord.Contains(Input.Text.ToLower()))
+                    if (geheimWoord.Contains(TB_Input.Text.ToLower()))
                     {
                         TimerResetCorrect();
                         VervangMetCorrecteLetters();
                         OutputText();
                     }
-                    else if (!geheimWoord.Contains(Input.Text.ToLower()))
+                    else if (!geheimWoord.Contains(TB_Input.Text.ToLower()))
                     {
                         FouteGok();
-                        fouteLetters += $"{Input.Text.ToLower()} ";
+                        fouteLetters += $"{TB_Input.Text.ToLower()} ";
                         OutputText();
                     }
                 }
-                else if (Input.Text.ToLower() == geheimWoord || String.Join("", outputGeheimWoord) == geheimWoord)
+                else if (TB_Input.Text.ToLower() == geheimWoord || String.Join("", outputGeheimWoord) == geheimWoord)
                 {
                     TimerReset();
                     VervangMetCorrectWoord();
                     OutputText();
-                    MSG_Label.Content = $"Proficiat speler 2, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!\n\r" +
-                                        $"Geef je naam in om de score op te slaan.";
-                    BTN_Raad.Visibility = Visibility.Hidden;
-                    BTN_Opslaan.Visibility = Visibility.Visible;
+                    MSG_Label.Content = $"Proficiat, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!";
                 }
                 else
                 {
@@ -162,17 +221,6 @@ namespace Galgje_v3
             {
                 TimerReset();
             }
-        }
-
-        private void BTN_Opslaan_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            spelerNaam = Input.Text;
-            aantalLevensOpgebruikt = 10 - aantalLevens;
-            huidigeDagEnTijd = DateTime.Now;
-            string huidigeTijd = huidigeDagEnTijd.ToLongTimeString();
-            MSG_Label.Content = score.AppendLine($"{spelerNaam} - {aantalLevensOpgebruikt} levens ({huidigeTijd})");
-            BTN_Opslaan.Visibility = Visibility.Hidden;
-            Input.IsEnabled = false;
         }
 
         /// <summary>
@@ -191,7 +239,7 @@ namespace Galgje_v3
         {
             timer.Stop();
             aantalLevens = 10;
-            countdown = 11;
+            countdown = countdownInput;
             countdownTwee = 1;
             UpdateGalg();
             ClearAlleInputEnOutput();
@@ -199,8 +247,8 @@ namespace Galgje_v3
             BTN_StartOpnieuw.Visibility = Visibility.Hidden;
             BTN_Raad.Visibility = Visibility.Hidden;
             BTN_NieuwSpel.Visibility = Visibility.Visible;
-            Input.IsEnabled = false;
-            Input.Visibility = Visibility.Hidden;
+            TB_Input.IsEnabled = false;
+            TB_Input.Visibility = Visibility.Hidden;
             MSG_Label.Content = "Druk op  ' Nieuw Spel '  om te starten";
         }
 
@@ -214,7 +262,7 @@ namespace Galgje_v3
         /// </summary>
         private void VervangMetCorrecteLetters()
         {
-            char a = char.Parse(Input.Text.ToLower());
+            char a = char.Parse(TB_Input.Text.ToLower());
 
             for (int i = 0; i < geheimWoord.Length; i++)
             {
@@ -287,7 +335,7 @@ namespace Galgje_v3
             Output.Text = $"Aantal levens: {aantalLevens}\n\r" +
                           $"Geheim Woord: {tempOutput}\n\r" +
                           $"Foute letters: {fouteLetters}";
-            Input.Text = "";
+            TB_Input.Text = "";
         }
 
         /// <summary>
@@ -330,18 +378,11 @@ namespace Galgje_v3
             if (countdown == 0)
             {
                 VerliesLeven();
-                MSG_Label.Content = $"Sorry, te traag...";
                 VolledigScherm.Background = new SolidColorBrush(accent);
             }
             else if (countdown < 0)
             {
                 TimerResetFout();
-            }
-            else if (aantalLevens == 0)
-            {
-                VolledigScherm.Background = new SolidColorBrush(accent);
-                TimerReset();
-                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
 
@@ -365,16 +406,10 @@ namespace Galgje_v3
                 UpdateGalg();
                 TimerReset();
                 timerTwee.Stop();
-                countdown = 10;
+                countdown = countdownInput;
                 timer.Start();
                 TB_Timer.Text = countdown.ToString();
                 VolledigScherm.Background = Brushes.Transparent;
-            }
-            else if (aantalLevens == 0)
-            {
-                VolledigScherm.Background = new SolidColorBrush(accent);
-                TimerReset();
-                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
 
@@ -391,7 +426,7 @@ namespace Galgje_v3
         private void TimerResetCorrect()
         {
             timer.Stop();
-            countdown = 10;
+            countdown = countdownInput;
             timer.Start();
             TB_Timer.Text = countdown.ToString();
         }
@@ -406,7 +441,7 @@ namespace Galgje_v3
             OutputText();
             countdown--;
             timer.Stop();
-            countdown = 10;
+            countdown = countdownInput;
             timer.Start();
             VolledigScherm.Background = Brushes.Transparent;
             TB_Timer.Text = countdown.ToString();
@@ -451,7 +486,7 @@ namespace Galgje_v3
         private void ClearAlleInputEnOutput()
         {
             fouteLetters = "";
-            Input.Text = "";
+            TB_Input.Text = "";
             Output.Text = "";
             TB_Timer.Text = "";
         }
@@ -465,12 +500,23 @@ namespace Galgje_v3
             achtergrondMuziek.Play();
             achtergrondMuziek.MediaEnded += new EventHandler(MediaEnded);
         }
-
         private void VerliesLeven()
         {
             aantalLevens--;
-            verliesLeven.Open(new Uri(@"Resources/bingbong.mp3", UriKind.Relative));
+            verliesLeven.Open(new Uri(@"Resources/demonicscream.mp3", UriKind.Relative));
             verliesLeven.Play();
+
+            if (aantalLevens == 0)
+            {
+                VolledigScherm.Background = new SolidColorBrush(accent);
+                UpdateGalg();
+                OutputText();
+                TimerReset();
+                BTN_Raad.Visibility = Visibility.Hidden;
+                TB_Input.Visibility = Visibility.Hidden;
+                TB_Input.IsEnabled = false;
+                MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
+            }
         }
 
         /// <summary>
@@ -500,6 +546,7 @@ namespace Galgje_v3
 
         private void mnuHint_Click(object sender, RoutedEventArgs e)
         {
+            hint = true;
             Random rng = new Random();
             string hintLetter = alfabet[rng.Next(0, alfabet.Length)];
 
@@ -567,9 +614,25 @@ namespace Galgje_v3
             }
         }
 
+        private void ScoreOpslaan()
+        {
+            if (hint)
+            {
+                return;
+            }
+            else
+            {
+                spelerNaam = Interaction.InputBox("Wat is je naam?", "Nieuwe hoogste score !!!", spelerNaam);
+                aantalLevensOpgebruikt = 10 - aantalLevens;
+                string huidigeTijd = DateTime.Now.ToLongTimeString();
+                scoreSpeler = $"{spelerNaam} - {aantalLevensOpgebruikt} levens ({huidigeTijd})";
+                scorebord.Add(scoreSpeler);
+            }
+        }
+
         private void mnuScorebord_Click(object sender, RoutedEventArgs e)
         {
-
+            scorebord.Sort();
         }
     }
 
