@@ -16,3 +16,21 @@ C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Ga
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\obj\Debug\Galgje v3.exe
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\obj\Debug\Galgje v3.pdb
 C:\Users\12101870\Documents\Notities en Documenten\Werkplekleren 1\Opdrachten\Galgje\Galgje\Galgje v3\bin\Debug\Resources\demonicscream.mp3
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\bin\Debug\Resources\demonicscream.mp3
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\bin\Debug\Resources\unseenhorrors.mp3
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\bin\Debug\Galgje v3.exe.config
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\bin\Debug\Galgje v3.exe
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\bin\Debug\Galgje v3.pdb
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3.csproj.AssemblyReference.cache
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\MainWindow.g.cs
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\App.g.cs
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3_Content.g.cs
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3_MarkupCompile.cache
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3_MarkupCompile.lref
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\MainWindow.baml
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3.g.resources
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje_v3.Properties.Resources.resources
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3.csproj.GenerateResource.cache
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3.csproj.CoreCompileInputs.cache
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3.exe
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\Galgje v3.pdb

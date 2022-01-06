@@ -71,7 +71,7 @@ namespace Galgje_v3
         /// </summary>
         private void BTN_NieuwSpel_MouseDown(object sender, RoutedEventArgs e)
         {
-            MSG_Label.Content = "Heb je vrienden of niet ?";
+            MSG_Label.Content = "Wil je tegen de computer spelen of tegen iemand anders ?";
             BTN_NieuwSpel.Visibility = Visibility.Hidden;
             BTN_Singleplayer.Visibility = Visibility.Visible;
             BTN_Multiplayer.Visibility = Visibility.Visible;
@@ -107,6 +107,9 @@ namespace Galgje_v3
             TimerInstellen();
             BTN_Singleplayer.Visibility = Visibility.Hidden;
             BTN_Multiplayer.Visibility = Visibility.Hidden;
+            BTN_Verberg.Visibility = Visibility.Visible;
+            TB_Input.Visibility = Visibility.Visible;
+            TB_Input.IsEnabled = true;
         }
 
         private void TimerInstellen()
@@ -206,10 +209,15 @@ namespace Galgje_v3
                 }
                 else if (TB_Input.Text.ToLower() == geheimWoord || String.Join("", outputGeheimWoord) == geheimWoord)
                 {
+                    BTN_Raad.Visibility = Visibility.Hidden;
+                    TB_Input.IsEnabled = false;
+                    TB_Input.Visibility = Visibility.Hidden;
+                    Hint.IsEnabled = false;
                     TimerReset();
                     VervangMetCorrectWoord();
                     OutputText();
                     MSG_Label.Content = $"Proficiat, je hebt het geheime woord  ' {geheimWoord} '  geraden !!!";
+                    ScoreOpslaan();
                 }
                 else
                 {
@@ -625,14 +633,21 @@ namespace Galgje_v3
                 spelerNaam = Interaction.InputBox("Wat is je naam?", "Nieuwe hoogste score !!!", spelerNaam);
                 aantalLevensOpgebruikt = 10 - aantalLevens;
                 string huidigeTijd = DateTime.Now.ToLongTimeString();
-                scoreSpeler = $"{spelerNaam} - {aantalLevensOpgebruikt} levens ({huidigeTijd})";
+                scoreSpeler = $"{aantalLevensOpgebruikt}{spelerNaam} - {aantalLevensOpgebruikt} levens ({huidigeTijd})";
                 scorebord.Add(scoreSpeler);
+                scorebord.Sort();
             }
         }
 
         private void mnuScorebord_Click(object sender, RoutedEventArgs e)
         {
-            scorebord.Sort();
+            score.Clear();
+
+            foreach (string str in scorebord)
+            {
+                score.AppendLine(str.ToString().Remove(0, 1));
+            }
+            MessageBox.Show(score.ToString());
         }
     }
 

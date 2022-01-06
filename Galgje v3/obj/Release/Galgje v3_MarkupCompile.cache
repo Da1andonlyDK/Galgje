@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Debug\
+C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\obj\Release\
 Galgje_v3
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\App.xaml
 11151548125
 22075233335
@@ -16,5 +16,5 @@ C:\Users\kerkh\OneDrive\Bureaublad\Galgje\Galgje v3\App.xaml
 14-951981417
 MainWindow.xaml;
 
-False
+True
 
