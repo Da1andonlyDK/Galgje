@@ -23,10 +23,7 @@ namespace Galgje_v3
     public partial class MainWindow : Window
     {
         /// <summary>
-        /// Declareren variables
-        /// Aanmaken mediaplayer voor achtergrondmuziek
-        /// Aanmaken timer
-        /// Aanmaken accentkleur
+        /// Declareren variables.
         /// </summary>
         private bool hint = false;
         private int aantalLevens = 10, aantalLevensOpgebruikt, countdown, countdownInput, countdownTwee = 1;
@@ -77,10 +74,17 @@ namespace Galgje_v3
             BTN_Multiplayer.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Oproepen 
+        /// </summary>
         private void NieuwSpel_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             BTN_NieuwSpel_MouseDown(sender, e);
         }
+
+        /// <summary>
+        /// Methode om Singleplayer-modus te starten.
+        /// </summary>
 
         private void BTN_Singleplayer_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -102,6 +106,9 @@ namespace Galgje_v3
 
         }
 
+        /// <summary>
+        /// Methode om Multiplayer-modus te starten.
+        /// </summary>
         private void BTN_Multiplayer_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TimerInstellen();
@@ -111,33 +118,6 @@ namespace Galgje_v3
             TB_Input.Visibility = Visibility.Visible;
             TB_Input.IsEnabled = true;
         }
-
-        private void TimerInstellen()
-        {
-            try
-            {
-                countdownInput = int.Parse(Interaction.InputBox("Hoe lang wil je de tijd hebben om te raden?\n\rGeef een getal tussen 5 en 25.", "Timer", "10"));
-                countdown = countdownInput;
-
-                if (countdown < 5 || countdown > 25)
-                {
-                    if (MessageBox.Show("Het ingegeven getal bevind zich buiten het gevraagde bereik, probeer opnieuw...") == MessageBoxResult.OK)
-                    {
-                        TimerInstellen();
-                    }
-                }
-
-
-            }
-            catch (Exception)
-            {
-                if (MessageBox.Show("De input is geen getal tussen 5 en 25, probeer opnieuw...") == MessageBoxResult.OK)
-                {
-                    TimerInstellen();
-                }
-            }
-        }
-
 
         /// <summary>
         /// <code>
@@ -526,32 +506,38 @@ namespace Galgje_v3
                 MSG_Label.Content = $"Sorry, je hebt geen levens meer over... Het geheime woord was ' {geheimWoord} ' .";
             }
         }
-
         /// <summary>
-        /// Methode om achtergrondmuziek continue te laten spelen.
+        /// Methode om speler timer te laten instellen.
         /// </summary>
-        private void MediaEnded(object sender, EventArgs e)
+        private void TimerInstellen()
         {
-            achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
-            achtergrondMuziek.Play();
+            try
+            {
+                countdownInput = int.Parse(Interaction.InputBox("Hoe lang wil je de tijd hebben om te raden?\n\rGeef een getal tussen 5 en 25.", "Timer", "10"));
+                countdown = countdownInput;
+
+                if (countdown < 5 || countdown > 25)
+                {
+                    if (MessageBox.Show("Het ingegeven getal bevind zich buiten het gevraagde bereik, probeer opnieuw...") == MessageBoxResult.OK)
+                    {
+                        TimerInstellen();
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+                if (MessageBox.Show("De input is geen getal tussen 5 en 25, probeer opnieuw...") == MessageBoxResult.OK)
+                {
+                    TimerInstellen();
+                }
+            }
         }
 
         /// <summary>
-        /// 'Play'-knop functioneel maken.
+        /// Methode om speler hint te geven.
         /// </summary>
-        private void BTN_Play_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            achtergrondMuziek.Play();
-        }
-
-        /// <summary>
-        /// 'Stop'-knop functioneel maken.
-        /// </summary>
-        private void BTN_Stop_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            achtergrondMuziek.Pause();
-        }
-
         private void mnuHint_Click(object sender, RoutedEventArgs e)
         {
             hint = true;
@@ -566,7 +552,7 @@ namespace Galgje_v3
             {
                 timer.Stop();
                 VolledigScherm.Background = new SolidColorBrush(accent);
-                MessageBoxResult resultaat =  MessageBox.Show($"Het geheim woord bevat NIET de letter '{hintLetter}'...", "Hint", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBoxResult resultaat = MessageBox.Show($"Het geheim woord bevat NIET de letter '{hintLetter}'...", "Hint", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 switch (resultaat)
                 {
@@ -606,22 +592,9 @@ namespace Galgje_v3
             }
         }
 
-        private void mnuAfsluiten_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult resultaat = MessageBox.Show("Ben je zeker dat je wilt afsluiten?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-
-            switch (resultaat)
-            {
-                case MessageBoxResult.OK:
-                    Close();
-                    break;
-                case MessageBoxResult.Cancel:
-                    return;
-                default:
-                    break;
-            }
-        }
-
+        /// <summary>
+        /// Methode om score op te slaan in list.
+        /// </summary>
         private void ScoreOpslaan()
         {
             if (hint)
@@ -639,6 +612,9 @@ namespace Galgje_v3
             }
         }
 
+        /// <summary>
+        /// Methode om scorebord weer te geven.
+        /// </summary>
         private void mnuScorebord_Click(object sender, RoutedEventArgs e)
         {
             score.Clear();
@@ -648,6 +624,50 @@ namespace Galgje_v3
                 score.AppendLine(str.ToString().Remove(0, 1));
             }
             MessageBox.Show(score.ToString());
+        }
+
+        /// <summary>
+        /// Methode om achtergrondmuziek continue te laten spelen.
+        /// </summary>
+        private void MediaEnded(object sender, EventArgs e)
+        {
+            achtergrondMuziek.Open(new Uri(@"Resources/unseenhorrors.mp3", UriKind.Relative));
+            achtergrondMuziek.Play();
+        }
+
+        /// <summary>
+        /// 'Play'-knop functioneel maken.
+        /// </summary>
+        private void BTN_Play_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            achtergrondMuziek.Play();
+        }
+
+        /// <summary>
+        /// 'Stop'-knop functioneel maken.
+        /// </summary>
+        private void BTN_Stop_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            achtergrondMuziek.Pause();
+        }
+
+        /// <summary>
+        /// Methode voor aflsuiten applicatie.
+        /// </summary>
+        private void mnuAfsluiten_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult resultaat = MessageBox.Show("Ben je zeker dat je wilt afsluiten?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+
+            switch (resultaat)
+            {
+                case MessageBoxResult.OK:
+                    Close();
+                    break;
+                case MessageBoxResult.Cancel:
+                    return;
+                default:
+                    break;
+            }
         }
     }
 

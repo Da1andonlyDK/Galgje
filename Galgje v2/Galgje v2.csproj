@@ -115,19 +115,7 @@
     <Resource Include="Resources\galg8.png" />
     <Resource Include="Resources\galg9.png" />
     <Resource Include="Resources\galg10.png" />
-    <Content Include="Resources\sf0.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\sf1.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\sf2.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\sf3.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\sf4.mp3">
+    <Content Include="Resources\demonicscream.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\unseenhorrors.mp3">
